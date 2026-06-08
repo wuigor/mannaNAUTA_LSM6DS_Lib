@@ -10,7 +10,7 @@ Por padrão a biblioteca inicializa o barramento I2C com:
 - SCL: GPIO 4
 - Endereco I2C: `0x6A`
 
-## Uso basico
+## Uso bsico
 
 ```cpp
 #include <Wire.h>
@@ -43,13 +43,13 @@ void loop() {
 imu.begin(21, 22);
 ```
 
-## Endereco I2C customizado
+## Endereço I2C customizado 
 
 ```cpp
 imu.begin(5, 4, 0x6B);
 ```
 
-## Variante explicita
+## Variante explícita
 
 O modo padrão tenta detectar automaticamente a variante do sensor.
 Se quiser fixar a variante:
