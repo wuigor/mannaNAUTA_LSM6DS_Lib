@@ -135,3 +135,7 @@ bool habilitada = imu.boardOrientationCorrectionEnabled();
 - `Pedometer`: contador de passos.
 - `AxisOrientationMatrix`: teste visual básico da orientação dos eixos na matriz
   de 25 LEDs.
+
+Aviso: o exemplo `AxisOrientationMatrix` precisa da biblioteca
+[mannaNAUTA_WS2812_Lib](https://github.com/wuigor/mannaNAUTA_WS2812_Lib)
+para controlar os LEDs WS2812.
