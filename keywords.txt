@@ -1,0 +1,17 @@
+MannaNAUTA_LSM6DS	KEYWORD1
+mannanauta_lsm6ds_vector_t	KEYWORD1
+mannanauta_lsm6ds_temperature_t	KEYWORD1
+begin	KEYWORD2
+beginWithWire	KEYWORD2
+getEvent	KEYWORD2
+readAcceleration	KEYWORD2
+readGyroscope	KEYWORD2
+readTemperature	KEYWORD2
+temperatureAvailable	KEYWORD2
+setAccelRange	KEYWORD2
+setGyroRange	KEYWORD2
+setAccelDataRate	KEYWORD2
+setGyroDataRate	KEYWORD2
+variantName	KEYWORD2
+MANNANAUTA_LSM6DS_DEFAULT_SDA	LITERAL1
+MANNANAUTA_LSM6DS_DEFAULT_SCL	LITERAL1
