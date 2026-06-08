@@ -8,6 +8,8 @@ readAcceleration	KEYWORD2
 readGyroscope	KEYWORD2
 readTemperature	KEYWORD2
 temperatureAvailable	KEYWORD2
+setBoardOrientationCorrection	KEYWORD2
+boardOrientationCorrectionEnabled	KEYWORD2
 setAccelRange	KEYWORD2
 setGyroRange	KEYWORD2
 setAccelDataRate	KEYWORD2

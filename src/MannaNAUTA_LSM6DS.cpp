@@ -33,7 +33,8 @@ MannaNAUTA_LSM6DS::MannaNAUTA_LSM6DS()
       _accelRange(LSM6DS_ACCEL_RANGE_4_G),
       _gyroRange(LSM6DS_GYRO_RANGE_2000_DPS),
       _accelDataRate(LSM6DS_RATE_104_HZ),
-      _gyroDataRate(LSM6DS_RATE_104_HZ), _temperatureSensitivity(256.0f) {}
+      _gyroDataRate(LSM6DS_RATE_104_HZ), _temperatureSensitivity(256.0f),
+      _boardOrientationCorrection(true) {}
 
 bool MannaNAUTA_LSM6DS::begin() {
   return begin(MANNANAUTA_LSM6DS_DEFAULT_SDA, MANNANAUTA_LSM6DS_DEFAULT_SCL);
@@ -159,9 +160,20 @@ int MannaNAUTA_LSM6DS::readAcceleration(float &x, float &y, float &z) {
   }
 
   float scale = accelRangeG() / 32768.0f;
-  x = rawX * scale;
-  y = rawY * scale;
-  z = rawZ * scale;
+  float sensorX = rawX * scale;
+  float sensorY = rawY * scale;
+  float sensorZ = rawZ * scale;
+
+  if (_boardOrientationCorrection) {
+    x = -sensorY;
+    y = -sensorX;
+    z = sensorZ;
+  } else {
+    x = sensorX;
+    y = sensorY;
+    z = sensorZ;
+  }
+
   return 1;
 }
 
@@ -181,9 +193,20 @@ int MannaNAUTA_LSM6DS::readGyroscope(float &x, float &y, float &z) {
   }
 
   float scale = gyroRangeDps() / 32768.0f;
-  x = rawX * scale;
-  y = rawY * scale;
-  z = rawZ * scale;
+  float sensorX = rawX * scale;
+  float sensorY = rawY * scale;
+  float sensorZ = rawZ * scale;
+
+  if (_boardOrientationCorrection) {
+    x = -sensorY;
+    y = -sensorX;
+    z = sensorZ;
+  } else {
+    x = sensorX;
+    y = sensorY;
+    z = sensorZ;
+  }
+
   return 1;
 }
 
@@ -202,6 +225,14 @@ float MannaNAUTA_LSM6DS::readTemperature(void) {
 
 bool MannaNAUTA_LSM6DS::temperatureAvailable(void) {
   return (status() & 0x04) != 0;
+}
+
+void MannaNAUTA_LSM6DS::setBoardOrientationCorrection(bool enabled) {
+  _boardOrientationCorrection = enabled;
+}
+
+bool MannaNAUTA_LSM6DS::boardOrientationCorrectionEnabled(void) const {
+  return _boardOrientationCorrection;
 }
 
 lsm6ds_data_rate_t MannaNAUTA_LSM6DS::getAccelDataRate(void) {

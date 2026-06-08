@@ -107,6 +107,9 @@ public:
   float readTemperature(void);
   bool temperatureAvailable(void);
 
+  void setBoardOrientationCorrection(bool enabled);
+  bool boardOrientationCorrectionEnabled(void) const;
+
   lsm6ds_data_rate_t getAccelDataRate(void);
   void setAccelDataRate(lsm6ds_data_rate_t dataRate);
 
@@ -164,6 +167,7 @@ private:
   lsm6ds_data_rate_t _accelDataRate;
   lsm6ds_data_rate_t _gyroDataRate;
   float _temperatureSensitivity;
+  bool _boardOrientationCorrection;
 };
 
 #endif
