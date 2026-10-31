@@ -9,16 +9,16 @@ void setup() {
     delay(10);
   }
 
-  Serial.println("mannaNAUTA LSM6DS - endereco I2C customizado");
+  Serial.println("mannaNAUTA LSM6DS - custom I2C address");
 
   if (!imu.begin(SDA_PIN, SCL_PIN, 0x6B)) {
-    Serial.println("Falha ao encontrar o LSM6DS em 0x6B.");
+    Serial.println("Failed to find the LSM6DS at 0x6B.");
     while (1) {
       delay(10);
     }
   }
 
-  Serial.print("Sensor detectado: ");
+  Serial.print("Detected sensor: ");
   Serial.println(imu.variantName());
 }
 

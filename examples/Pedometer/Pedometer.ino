@@ -12,32 +12,32 @@ void setup() {
   Serial.println("mannaNAUTA LSM6DS - pedometer");
 
   if (!imu.begin()) {
-    Serial.println("Falha ao encontrar o LSM6DS.");
+    Serial.println("Failed to find the LSM6DS.");
     while (1) {
       delay(10);
     }
   }
 
-  Serial.print("Sensor detectado: ");
+  Serial.print("Detected sensor: ");
   Serial.println(imu.variantName());
 
-   // acelerometro em 2G e taxa de 26 Hz.
+  // Configure the accelerometer for 2 g and a 26 Hz output data rate.
   imu.setAccelRange(LSM6DS_ACCEL_RANGE_2_G);
   imu.setGyroRange(LSM6DS_GYRO_RANGE_250_DPS);
   imu.setAccelDataRate(LSM6DS_RATE_26_HZ);
   imu.setGyroDataRate(LSM6DS_RATE_26_HZ);
 
-  // Saida de deteccao de passo no INT1, se o pino estiver ligado no hardware.
+  // Route step detection to INT1 if the pin is connected on the hardware.
   imu.configInt1(false, false, false, true);
 
   imu.resetPedometer();
   imu.enablePedometer(true);
 
-  Serial.println("Pedometer habilitado.");
+  Serial.println("Pedometer enabled.");
 }
 
 void loop() {
-  Serial.print("Passos: ");
+  Serial.print("Steps: ");
   Serial.println(imu.readPedometer());
 
   delay(100);

@@ -98,25 +98,25 @@ void showDirection(float rollDeg, float pitchDeg) {
 
   if (absRoll < TILT_THRESHOLD_DEG && absPitch < TILT_THRESHOLD_DEG) {
     drawNeutral();
-    Serial.println("NEUTRO");
+    Serial.println("NEUTRAL");
     return;
   }
 
   if (absPitch >= absRoll) {
     if (pitchDeg < 0) {
       drawForward();
-      Serial.println("FRENTE");
+      Serial.println("FORWARD");
     } else {
       drawBack();
-      Serial.println("TRAS");
+      Serial.println("BACKWARD");
     }
   } else {
     if (rollDeg > 0) {
       drawRight();
-      Serial.println("DIREITA");
+      Serial.println("RIGHT");
     } else {
       drawLeft();
-      Serial.println("ESQUERDA");
+      Serial.println("LEFT");
     }
   }
 }
@@ -129,13 +129,13 @@ void setup() {
   matrix.setBrightness(20);
   drawNeutral();
 
-  Serial.println("mannaNAUTA LSM6DS - teste visual dos eixos");
+  Serial.println("mannaNAUTA LSM6DS - visual axis test");
 
   if (!imu.begin()) {
-    Serial.println("LSM6DS nao encontrado em 0x6A. Tentando 0x6B...");
+    Serial.println("LSM6DS not found at 0x6A. Trying 0x6B...");
 
     if (!imu.begin(SDA_PIN, SCL_PIN, 0x6B, &Wire)) {
-      Serial.println("LSM6DS nao encontrado.");
+      Serial.println("LSM6DS not found.");
       matrix.setAllLedsColor(80, 0, 0);
       while (1) {
         delay(10);
@@ -143,7 +143,7 @@ void setup() {
     }
   }
 
-  Serial.print("Sensor detectado: ");
+  Serial.print("Detected sensor: ");
   Serial.println(imu.variantName());
 }
 
@@ -153,7 +153,7 @@ void loop() {
   mannanauta_lsm6ds_temperature_t temp;
 
   if (!imu.getEvent(&accel, &gyro, &temp)) {
-    Serial.println("Falha na leitura do LSM6DS.");
+    Serial.println("Failed to read the LSM6DS.");
     matrix.setAllLedsColor(80, 0, 0);
     delay(250);
     return;
@@ -170,7 +170,7 @@ void loop() {
   Serial.print(rollDeg, 1);
   Serial.print("  Pitch: ");
   Serial.print(pitchDeg, 1);
-  Serial.print("  Direcao: ");
+  Serial.print("  Direction: ");
 
   showDirection(rollDeg, pitchDeg);
 

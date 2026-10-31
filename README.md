@@ -1,45 +1,68 @@
-# LSM6DS Lib for mannaNAUTA
+# mannaNAUTA LSM6DS Library
 
-Biblioteca Arduino para usar sensores da família LSM6DS no hardware mannaNAUTA
-com ESP32-S3.
+Arduino library for using LSM6DS-family inertial sensors with the ESP32-S3-based
+mannaNAUTA board.
 
-Esta biblioteca possui driver I2C próprio e foi preparada para a forma como o
-CI LSM6DS é soldado na placa mannaNAUTA.
+The library provides a standalone I2C driver and accounts for the physical
+orientation of the LSM6DS IC on the mannaNAUTA board.
 
-## Padrões da placa
+## Features
 
-Por padrão, a biblioteca inicializa o barramento I2C com:
+- Accelerometer, gyroscope, and temperature readings
+- Automatic sensor variant detection
+- Configurable measurement ranges and output data rates
+- Pedometer, wake-up, interrupt, and high-pass filter support
+- Custom I2C pins, address, and bus
+- Board-oriented axis correction, enabled by default
+
+## Supported sensors
+
+- LSM6DSOX
+- LSM6DSO32
+- LSM6DS3
+- LSM6DS33
+- LSM6DS3TR-C
+- LSM6DSL
+- ISM330DHCX
+
+## Installation
+
+Install **mannaNAUTA LSM6DS** from the Arduino IDE Library Manager. To install
+it manually, download this repository and place it in your Arduino `libraries`
+folder.
+
+## Board defaults
+
+By default, the library initializes the I2C bus with:
 
 - SDA: GPIO 5
 - SCL: GPIO 4
-- Endereço I2C: `0x6A`
+- I2C address: `0x6A`
 
-Uso básico:
+Basic initialization:
 
 ```cpp
 imu.begin();
 ```
 
-Esse comando já usa os pinos e o endereço padrão da placa mannaNAUTA.
+This call uses the default mannaNAUTA board pins and address.
 
-## Orientação do CI na placa mannaNAUTA
+## Sensor orientation on the mannaNAUTA board
 
-Nas placas mannaNAUTA, o CI LSM6DS é soldado com uma orientação física diferente
-do referencial esperado pelo usuário ao movimentar a placa.
+The LSM6DS IC is mounted in an orientation that differs from the natural frame
+of reference used when moving the mannaNAUTA board.
 
-Por isso, esta biblioteca já remapeia os eixos internamente para que as leituras
-representem a orientação da placa mannaNAUTA, e não a orientação física original
-do CI.
+The library therefore remaps the axes internally so readings represent the
+board orientation instead of the IC's original physical orientation.
 
-Com a correção padrão habilitada:
+With the default correction enabled:
 
-- inclinar a placa para frente gera leitura coerente com frente;
-- inclinar a placa para trás gera leitura coerente com trás;
-- inclinar a placa para direita gera leitura coerente com direita;
-- inclinar a placa para esquerda gera leitura coerente com esquerda.
+- tilting the board forward produces a forward-oriented reading;
+- tilting it backward produces a backward-oriented reading;
+- tilting it right produces a right-oriented reading;
+- tilting it left produces a left-oriented reading.
 
-Esse remapeamento é aplicado nas leituras de acelerômetro e giroscópio retornadas
-por:
+This remapping is applied to accelerometer and gyroscope readings returned by:
 
 ```cpp
 readAcceleration()
@@ -47,7 +70,7 @@ readGyroscope()
 getEvent()
 ```
 
-## Exemplo básico
+## Basic example
 
 ```cpp
 #include <Wire.h>
@@ -59,7 +82,7 @@ void setup() {
   Serial.begin(115200);
 
   if (!imu.begin()) {
-    Serial.println("LSM6DS não encontrado");
+    Serial.println("LSM6DS not found");
     while (1) delay(10);
   }
 }
@@ -78,64 +101,66 @@ void loop() {
 }
 ```
 
-## Pinos customizados
+## Custom I2C pins
 
-Se for necessário usar outros pinos de I2C:
+To use different I2C pins:
 
 ```cpp
 imu.begin(21, 22);
 ```
 
-## Endereço I2C customizado
+## Custom I2C address
 
-Se o sensor estiver no endereço `0x6B`:
+If the sensor uses address `0x6B`:
 
 ```cpp
 imu.begin(5, 4, 0x6B);
 ```
 
-Também é possível passar explicitamente o barramento `Wire`:
+You can also pass the `Wire` bus explicitly:
 
 ```cpp
 imu.begin(5, 4, 0x6B, &Wire);
 ```
 
-## Variante explícita
+## Explicit sensor variant
 
-O modo padrão tenta detectar automaticamente a variante do sensor. Se quiser
-fixar uma variante:
+The default mode attempts to detect the sensor variant automatically. To select
+a variant explicitly:
 
 ```cpp
 imu.begin(5, 4, 0x6A, &Wire, MANNANAUTA_LSM6DSOX);
 ```
 
-## Desabilitar correção de orientação
+## Disabling board orientation correction
 
-Para a maioria dos usuários da placa mannaNAUTA, a correção deve permanecer
-habilitada.
+For most mannaNAUTA board users, the correction should remain enabled.
 
-Se precisar ler os eixos físicos originais do CI LSM6DS, desabilite a correção:
+To read the original physical axes of the LSM6DS IC, disable the correction:
 
 ```cpp
 imu.setBoardOrientationCorrection(false);
 ```
 
-Para verificar o estado atual:
+To check its current state:
 
 ```cpp
-bool habilitada = imu.boardOrientationCorrectionEnabled();
+bool enabled = imu.boardOrientationCorrectionEnabled();
 ```
 
-## Exemplos incluídos
+## Included examples
 
-- `BasicRead`: leitura básica de acelerômetro, giroscópio e temperatura.
-- `ConfigureRanges`: configuração de faixa e taxa de atualização.
-- `CustomAddress`: uso de endereço I2C alternativo.
-- `CustomPins`: uso de pinos I2C customizados.
-- `Pedometer`: contador de passos.
-- `AxisOrientationMatrix`: teste visual básico da orientação dos eixos na matriz
-  de 25 LEDs.
+- `BasicRead`: reads acceleration, angular velocity, and temperature.
+- `ConfigureRanges`: configures measurement ranges and output data rates.
+- `CustomAddress`: uses an alternative I2C address.
+- `CustomPins`: uses custom I2C pins.
+- `Pedometer`: reads the step counter.
+- `AxisOrientationMatrix`: visually tests axis orientation on the 25-LED matrix.
 
-Aviso: o exemplo `AxisOrientationMatrix` precisa da biblioteca
+The `AxisOrientationMatrix` example requires the
 [mannaNAUTA_WS2812_Lib](https://github.com/wuigor/mannaNAUTA_WS2812_Lib)
-para controlar os LEDs WS2812.
+library to control the WS2812 LEDs.
+
+## License
+
+Released under the MIT License. See [LICENSE](LICENSE) for details.

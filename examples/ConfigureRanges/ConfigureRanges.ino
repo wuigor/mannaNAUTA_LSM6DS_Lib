@@ -9,10 +9,10 @@ void setup() {
     delay(10);
   }
 
-  Serial.println("mannaNAUTA LSM6DS - configuracao de faixa e taxa");
+  Serial.println("mannaNAUTA LSM6DS - range and data rate configuration");
 
   if (!imu.begin()) {
-    Serial.println("Falha ao encontrar o LSM6DS.");
+    Serial.println("Failed to find the LSM6DS.");
     while (1) {
       delay(10);
     }
@@ -23,7 +23,7 @@ void setup() {
   imu.setAccelDataRate(LSM6DS_RATE_104_HZ);
   imu.setGyroDataRate(LSM6DS_RATE_104_HZ);
 
-  Serial.print("Sensor detectado: ");
+  Serial.print("Detected sensor: ");
   Serial.println(imu.variantName());
 }
 

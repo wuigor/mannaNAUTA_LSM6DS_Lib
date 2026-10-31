@@ -9,16 +9,16 @@ void setup() {
     delay(10);
   }
 
-  Serial.println("mannaNAUTA LSM6DS - leitura basica");
+  Serial.println("mannaNAUTA LSM6DS - basic read");
 
   if (!imu.begin()) {
-    Serial.println("Falha ao encontrar o LSM6DS.");
+    Serial.println("Failed to find the LSM6DS.");
     while (1) {
       delay(10);
     }
   }
 
-  Serial.print("Sensor detectado: ");
+  Serial.print("Detected sensor: ");
   Serial.println(imu.variantName());
 }
 

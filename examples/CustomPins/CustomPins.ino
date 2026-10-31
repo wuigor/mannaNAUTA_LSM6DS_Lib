@@ -12,16 +12,16 @@ void setup() {
     delay(10);
   }
 
-  Serial.println("mannaNAUTA LSM6DS - pinos customizados");
+  Serial.println("mannaNAUTA LSM6DS - custom I2C pins");
 
   if (!imu.begin(MY_SDA_PIN, MY_SCL_PIN)) {
-    Serial.println("Falha ao encontrar o LSM6DS nos pinos customizados.");
+    Serial.println("Failed to find the LSM6DS on the custom pins.");
     while (1) {
       delay(10);
     }
   }
 
-  Serial.print("Sensor detectado: ");
+  Serial.print("Detected sensor: ");
   Serial.println(imu.variantName());
 }
 
@@ -36,7 +36,7 @@ void loop() {
   if (imu.accelerationAvailable()) {
     imu.readAcceleration(ax, ay, az);
 
-    Serial.print("Aceleracao g: ");
+    Serial.print("Acceleration g: ");
     Serial.print(ax);
     Serial.print(", ");
     Serial.print(ay);
@@ -47,7 +47,7 @@ void loop() {
   if (imu.gyroscopeAvailable()) {
     imu.readGyroscope(gx, gy, gz);
 
-    Serial.print("Giroscopio dps: ");
+    Serial.print("Gyroscope dps: ");
     Serial.print(gx);
     Serial.print(", ");
     Serial.print(gy);
